@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planner zilnic - Planner</title>
+</head>
+<body>
+
+  <header>
+    <h1>Planner</h1>
+    <nav>
+      <a href="index.html">Acasă</a> |
+      <a href="planner.html">Planner</a> |
+      <a href="history.html">Istoric</a> |
+      <a href="about.html">Despre</a> |
+      <a href="contact.html">Contact</a>
+    </nav>
+    <hr>
+  </header>
+
+  <main>
+
+    <section aria-labelledby="addTaskTitle">
+      <h2 id="addTaskTitle">Adaugă activitate</h2>
+
+      <form>
+        <p>
+          <label for="taskText">Activitate:</label><br>
+          <input type="text" id="taskText" name="taskText" placeholder="Ex: Seminar" required />
+        </p>
+
+        <p>
+          <label for="taskTime">Ora:</label><br>
+          <input type="time" id="taskTime" name="taskTime" />
+        </p>
+
+        <p>
+          <label for="taskPriority">Prioritate:</label><br>
+          <select id="taskPriority" name="taskPriority">
+            <option value="mica">Mică</option>
+            <option value="medie" selected>Medie</option>
+            <option value="mare">Mare</option>
+          </select>
+        </p>
+
+        <button type="submit">Adaugă</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <section aria-labelledby="listTitle">
+      <h2 id="listTitle">Lista activităților</h2>
+      <div id="taskList">
+        <p>Încă nu ai activități adăugate.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <hr>
+  <footer>
+    <p>Planner zilnic — Lab 1</p>
+  </footer>
+
+</body>
+</html>
