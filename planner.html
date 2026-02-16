@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Planner zilnic - Planner</title>
+  <link rel="stylesheet" href="style.css">
 </head> 
 <body>
 
@@ -19,12 +20,17 @@
     <hr>
   </header>
 
+  <div class="hero">
+    <img class="banner" src="images/banner.jpg" alt="Planner banner">
+  </div>
+
   <main>
 
     <section aria-labelledby="addTaskTitle">
       <h2 id="addTaskTitle">Adaugă activitate</h2>
+        <p>Adaugă o sarcină și vezi-ți ziua productivă.</p>
 
-      <form>
+        <form>
         <p>
           <label for="taskText">Activitate:</label><br>
           <input type="text" id="taskText" name="taskText" placeholder="Ex: Seminar" required />
@@ -53,7 +59,7 @@
     <section aria-labelledby="listTitle">
       <h2 id="listTitle">Lista activităților</h2>
       <div id="taskList">
-        <p>Încă nu ai activități adăugate.</p>
+        <p>Nu ai activități — adaugă ceva din <a href="planner.html">formular</a>.</p>
       </div>
     </section>
 
@@ -61,8 +67,84 @@
 
   <hr>
   <footer>
-    <p>Planner zilnic — Lab 1</p>
   </footer>
+</footer>
+
+  <script>
+    (function(){
+      const form = document.querySelector('form');
+      const taskListEl = document.getElementById('taskList');
+      const STORAGE_KEY = 'plannerTasks';
+
+      function loadTasks(){
+        try{
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : [];
+        }catch(e){
+          return [];
+        }
+      }
+
+      function saveTasks(tasks){
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      }
+
+      function render(){
+        const tasks = loadTasks();
+        if(!tasks.length){
+          taskListEl.innerHTML = '<p>Încă nu ai activități adăugate.</p>';
+          return;
+        }
+
+        const ul = document.createElement('ul');
+        tasks.forEach(t => {
+          const li = document.createElement('li');
+          const timeText = t.time ? ' — ' + t.time : '';
+          li.innerHTML = `<strong>${escapeHtml(t.text)}</strong>${timeText} <em>(${escapeHtml(t.priority)})</em>`;
+
+          const del = document.createElement('button');
+          del.type = 'button';
+          del.textContent = 'Șterge';
+          del.style.marginLeft = '12px';
+          del.addEventListener('click', ()=>{ deleteTask(t.id); });
+          li.appendChild(del);
+
+          ul.appendChild(li);
+        });
+
+        taskListEl.innerHTML = '';
+        taskListEl.appendChild(ul);
+      }
+
+      function deleteTask(id){
+        const tasks = loadTasks().filter(t => t.id !== id);
+        saveTasks(tasks);
+        render();
+      }
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const text = document.getElementById('taskText').value.trim();
+        if(!text) return;
+        const time = document.getElementById('taskTime').value;
+        const priority = document.getElementById('taskPriority').value;
+        const tasks = loadTasks();
+        const task = { id: Date.now().toString(), text, time, priority };
+        tasks.push(task);
+        saveTasks(tasks);
+        form.reset();
+        render();
+      });
+
+      function escapeHtml(s){
+        return String(s).replace(/[&<>"']/g, function(c){
+          return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+      }
+
+      render();
+    })();
+  </script>
 
 </body>
 </html>
