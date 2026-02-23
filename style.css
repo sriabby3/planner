@@ -18,12 +18,13 @@ header{
     color: white;
     padding: 22px 12px;
     box-shadow: 0 4px 18px rgba(23,54,128,0.12);
+    text-align: center;
 }
 
 header h1{margin:0; font-size:1.6rem; text-align:center}
 header p{margin:6px 0 0; text-align:center; opacity:0.95}
 
-nav{display:flex; justify-content:center; gap:12px; margin-top:12px}
+nav{display:flex; justify-content:center; gap:12px; margin:12px auto 0; width:fit-content; flex-wrap:wrap}
 nav a{color:rgba(255,255,255,0.95); text-decoration:none; padding:6px 10px; border-radius:6px; font-weight:600}
 nav a:hover{background:rgba(255,255,255,0.08)}
 

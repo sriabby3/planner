@@ -1,0 +1,148 @@
+/* planner.css - stiluri specifice pentru planner.html (peste style.css) */
+
+:root{
+  --planner-max: 1050px;
+}
+
+body.page-planner{
+  background: radial-gradient(1200px 650px at 18% -10%, rgba(111,140,255,0.16), transparent 60%),
+              radial-gradient(950px 520px at 92% 0%, rgba(160,112,188,0.16), transparent 55%),
+              linear-gradient(180deg, #f9fbff 0%, var(--bg) 100%);
+}
+
+body.page-planner header{
+  background: linear-gradient(90deg, rgba(71,85,105,1), rgba(100,116,139,1));
+}
+
+body.page-planner header hr,
+body.page-planner > hr{
+  border: none;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+  margin: 16px auto 0;
+  max-width: var(--planner-max);
+}
+
+body.page-planner .hero{
+  max-width: var(--planner-max);
+}
+
+body.page-planner .hero .banner{
+  border-radius: 16px;
+  filter: hue-rotate(-10deg) saturate(1.06) contrast(1.02);
+}
+
+body.page-planner main{
+  max-width: var(--planner-max);
+  margin: 0 auto 24px;
+  padding: 0 12px;
+}
+
+body.page-planner main section{
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(16,24,40,0.06);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+}
+
+body.page-planner main h2{
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.35rem;
+}
+
+body.page-planner main p{
+  color: #1f2937;
+  line-height: 1.65;
+  margin: 10px 0;
+}
+
+/* Formular: păstrăm HTML-ul, dar îl facem mai compact pe desktop */
+body.page-planner form{
+  margin-top: 10px;
+}
+
+body.page-planner form p{
+  margin: 0 0 12px;
+}
+
+body.page-planner label{
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+body.page-planner input[type="text"],
+body.page-planner input[type="time"],
+body.page-planner select{
+  border-radius: 10px;
+}
+
+body.page-planner button{
+  border-radius: 10px;
+}
+
+/* Lista: aliniază conținut + butonul de ștergere */
+body.page-planner #taskList ul{
+  margin-top: 12px;
+}
+
+body.page-planner #taskList li{
+  align-items: flex-start;
+}
+
+body.page-planner #taskList li strong{
+  display: inline-block;
+  margin-right: 8px;
+}
+
+body.page-planner #taskList li em{
+  color: var(--muted);
+  font-style: normal;
+  font-weight: 650;
+  margin-left: 6px;
+}
+
+body.page-planner #taskList li button{
+  background: rgba(17,24,39,0.08);
+  color: #111827;
+  font-weight: 750;
+}
+
+body.page-planner #taskList li button:hover{
+  background: rgba(17,24,39,0.12);
+  transform: translateY(-1px);
+}
+
+@media (min-width: 900px){
+  body.page-planner main section{
+    padding: 28px;
+  }
+
+  body.page-planner main{
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  body.page-planner main > hr{
+    display: none;
+  }
+
+  body.page-planner section[aria-labelledby="addTaskTitle"] form{
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    align-items: end;
+  }
+
+  body.page-planner section[aria-labelledby="addTaskTitle"] form p{
+    margin: 0;
+  }
+
+  body.page-planner section[aria-labelledby="addTaskTitle"] form button{
+    grid-column: 1 / -1;
+    width: max-content;
+  }
+}

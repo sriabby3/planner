@@ -1,0 +1,96 @@
+/* about.css - stiluri specifice pentru about.html (peste style.css) */
+
+:root{
+  --about-max: 980px;
+}
+
+body{
+  /* păstrează fonturile globale, dar oferă un fundal mai calm pe pagina Despre */
+  background: radial-gradient(1200px 600px at 20% -10%, rgba(160,112,188,0.18), transparent 60%),
+              radial-gradient(900px 500px at 90% 0%, rgba(111,140,255,0.18), transparent 55%),
+              linear-gradient(180deg, #f9fbff 0%, var(--bg) 100%);
+}
+
+body.page-about header{
+  background: linear-gradient(90deg, rgba(255,215,0,1), rgba(255,250,205,1));
+}
+
+header hr,
+body > hr{
+  border: none;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+  margin: 16px auto 0;
+  max-width: var(--about-max);
+}
+
+.hero{
+  max-width: var(--about-max);
+}
+
+.hero .banner{
+  border-radius: 16px;
+  filter: saturate(1.06) contrast(1.03);
+}
+
+main{
+  max-width: var(--about-max);
+  margin: 0 auto 24px;
+  padding: 0 12px;
+}
+
+main section{
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(16,24,40,0.06);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+  border-top: 4px solid rgba(160,112,188,0.7);
+}
+
+main h2{
+  font-size: 1.35rem;
+  margin-bottom: 10px;
+}
+
+main p{
+  color: #1f2937;
+  line-height: 1.65;
+  margin: 10px 0;
+}
+
+/* style.css face ul/li să arate ca task-urile; aici resetăm doar pentru conținutul din Despre */
+main section ul{
+  list-style: disc;
+  padding-left: 1.2rem;
+  margin: 10px 0 0;
+}
+
+main section li{
+  display: list-item;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 6px 0;
+  border-radius: 0;
+}
+
+main a{
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 650;
+}
+
+main a:hover{
+  text-decoration: underline;
+}
+
+footer{
+  padding-top: 10px;
+}
+
+@media (min-width: 900px){
+  main section{
+    padding: 28px;
+  }
+}

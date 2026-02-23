@@ -1,0 +1,85 @@
+:root{
+  --index-max: 980px;
+}
+
+body.page-index{
+  background:
+              linear-gradient(180deg, rgba(55, 111, 221, 0.55) 0%, rgba(14, 51, 202, 0.6) 100%),
+              radial-gradient(1200px 650px at 20% -10%, rgba(17, 167, 187, 0.18), transparent 60%),
+              radial-gradient(900px 520px at 92% 0%, hsla(185, 57%, 48%, 0.18), transparent 55%),
+              url("images/nor.jpg");
+  background-size: auto, auto, auto, cover;
+  background-position: 0 0, 0 0, 0 0, center;
+  background-repeat: no-repeat;
+}
+
+body.page-index header{
+  background: linear-gradient(90deg, rgba(14,165,233,1), rgba(34,211,238,1));
+}
+
+body.page-index header hr,
+body.page-index > hr{
+  border: none;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+  margin: 16px auto 0;
+  max-width: var(--index-max);
+}
+
+body.page-index main{
+  max-width: var(--index-max);
+  margin: 0 auto 18px;
+  padding: 0 12px;
+}
+
+body.page-index main section{
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(16,24,40,0.06);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+  text-align: center;
+}
+
+body.page-index main h2{
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.35rem;
+}
+
+body.page-index main p{
+  color: #1f2937;
+  line-height: 1.65;
+  margin: 10px 0;
+}
+
+/* Footer cu identitate */
+body.page-index footer{
+  max-width: var(--index-max);
+  margin: 0 auto;
+  padding: 18px 12px 26px;
+}
+
+body.page-index footer p{
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  line-height: 1.8;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(16,24,40,0.06);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+body.page-index .inline-input{
+  margin: 0;
+}
+
+@media (min-width: 900px){
+  body.page-index main section{
+    padding: 28px;
+  }
+}

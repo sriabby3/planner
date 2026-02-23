@@ -1,0 +1,115 @@
+/* contact.css - stiluri specifice pentru contact.html (peste style.css) */
+
+:root{
+  --contact-max: 980px;
+}
+
+body.page-contact{
+  background: radial-gradient(1100px 600px at 15% -10%, rgba(160,112,188,0.18), transparent 60%),
+              radial-gradient(900px 520px at 95% 0%, rgba(111,140,255,0.18), transparent 55%),
+              linear-gradient(180deg, #f9fbff 0%, var(--bg) 100%);
+}
+
+body.page-contact header{
+  background:
+    radial-gradient(900px 240px at 15% -20%, rgba(255,255,255,0.45), transparent 60%),
+    radial-gradient(700px 220px at 35% -15%, rgba(254,243,199,0.55), transparent 58%),
+    linear-gradient(90deg, rgba(245,222,197,1), rgba(253,247,238,1));
+  color: rgba(41, 32, 25, 0.95);
+}
+
+body.page-contact header p{
+  opacity: 0.9;
+}
+
+body.page-contact nav a{
+  color: rgba(41, 32, 25, 0.92);
+}
+
+body.page-contact nav a:hover{
+  background: rgba(41, 32, 25, 0.08);
+}
+
+body.page-contact header hr,
+body.page-contact > hr{
+  border: none;
+  height: 1px;
+  background: rgba(41, 32, 25, 0.18);
+  margin: 16px auto 0;
+  max-width: var(--contact-max);
+}
+
+body.page-contact .hero{
+  max-width: var(--contact-max);
+}
+
+body.page-contact .hero .banner{
+  border-radius: 16px;
+  filter: hue-rotate(12deg) saturate(1.08) contrast(1.02);
+}
+
+body.page-contact main{
+  max-width: var(--contact-max);
+  margin: 0 auto 24px;
+  padding: 0 12px;
+}
+
+body.page-contact main section{
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(16,24,40,0.06);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+}
+
+body.page-contact main h2{
+  margin-top: 0;
+  margin-bottom: 14px;
+  font-size: 1.35rem;
+}
+
+/* Formular */
+body.page-contact form p{
+  margin: 0 0 12px;
+}
+
+body.page-contact label{
+  display: inline-block;
+  margin-bottom: 6px;
+}
+
+body.page-contact input[type="text"],
+body.page-contact input[type="email"],
+body.page-contact textarea{
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e6e9ef;
+  border-radius: 10px;
+  background: #fbfdff;
+}
+
+body.page-contact textarea{
+  resize: vertical;
+  min-height: 120px;
+}
+
+body.page-contact input:focus,
+body.page-contact textarea:focus{
+  outline: none;
+  border-color: rgba(94,247,74,0.6);
+  box-shadow: 0 10px 28px rgba(94,247,74,0.14);
+}
+
+body.page-contact button[type="submit"]{
+  width: 100%;
+}
+
+@media (min-width: 900px){
+  body.page-contact form{
+    max-width: 640px;
+  }
+
+  body.page-contact button[type="submit"]{
+    width: auto;
+  }
+}
