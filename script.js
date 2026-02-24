@@ -6,14 +6,23 @@
   const textInput = document.getElementById('taskText');
   const timeInput = document.getElementById('taskTime');
   const prioritySelect = document.getElementById('taskPriority');
+  const taskErrorEl = document.getElementById('taskError');
 
   const STORAGE_KEY = 'plannerTasks';
+  const HISTORY_KEY = 'plannerHistory';
 
   function loadTasks() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
+      const arr = Array.isArray(parsed) ? parsed : [];
+      return arr.map((t) => {
+        const createdAt =
+          typeof t?.createdAt === 'number' && Number.isFinite(t.createdAt)
+            ? t.createdAt
+            : 0;
+        return { ...t, done: !!t?.done, createdAt };
+      });
     } catch {
       return [];
     }
@@ -21,6 +30,20 @@
 
   function saveTasks(tasks) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  }
+
+  function loadHistory() {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveHistory(history) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
   }
 
   function escapeHtml(value) {
@@ -43,6 +66,24 @@
 
   function setTaskDone(id, done) {
     const tasks = loadTasks();
+    const current = tasks.find((t) => t.id === id);
+    const isCompletingNow = !!done && current && !current.done;
+
+    if (isCompletingNow) {
+      const history = loadHistory();
+      const alreadyInHistory = history.some((h) => h.id === id);
+      if (!alreadyInHistory) {
+        const historyItem = {
+          id: current.id,
+          text: current.text,
+          time: current.time,
+          priority: current.priority,
+          completedAt: new Date().toISOString(),
+        };
+        saveHistory([historyItem, ...history]);
+      }
+    }
+
     const next = tasks.map((t) => (t.id === id ? { ...t, done: !!done } : t));
     saveTasks(next);
     render();
@@ -129,7 +170,13 @@
     }
 
     const ul = document.createElement('ul');
-    tasks.forEach((task) => {
+    const sortedTasks = [...tasks].sort((a, b) => {
+      const doneDiff = Number(!!a.done) - Number(!!b.done);
+      if (doneDiff !== 0) return doneDiff; // unfinished first
+      return (a.createdAt ?? 0) - (b.createdAt ?? 0);
+    });
+
+    sortedTasks.forEach((task) => {
       ul.appendChild(createTaskElement(task));
     });
 
@@ -139,7 +186,11 @@
 
   function addTaskFromForm() {
     const text = (textInput?.value ?? '').trim();
-    if (!text) return;
+    if (!text) {
+      if (taskErrorEl) taskErrorEl.textContent = 'Completează câmpul „Activitate”.';
+      textInput?.focus();
+      return;
+    }
 
     const time = timeInput?.value ?? '';
     const priority = prioritySelect?.value ?? '';
@@ -156,12 +207,14 @@
       time,
       priority,
       done: false,
+      createdAt: Date.now(),
     };
 
     tasks.push(task);
     saveTasks(tasks);
 
     form.reset();
+    if (taskErrorEl) taskErrorEl.textContent = '';
     render();
 
     textInput?.focus();
@@ -170,6 +223,17 @@
   if (!form || !taskListEl || !textInput || !timeInput || !prioritySelect) {
     return;
   }
+
+  textInput.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    addTaskFromForm();
+  });
+
+  textInput.addEventListener('input', () => {
+    if (!taskErrorEl) return;
+    if (textInput.value.trim()) taskErrorEl.textContent = '';
+  });
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();

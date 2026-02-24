@@ -82,6 +82,13 @@ body.page-planner button{
   border-radius: 10px;
 }
 
+body.page-planner .form-error{
+  margin: 10px 0 0;
+  font-weight: 700;
+  color: var(--accent);
+  min-height: 1.2em;
+}
+
 /* Lista: aliniază conținut + butonul de ștergere */
 body.page-planner #taskList ul{
   margin-top: 12px;
