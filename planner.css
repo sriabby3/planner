@@ -103,6 +103,44 @@ body.page-planner #taskList li em{
   margin-left: 6px;
 }
 
+body.page-planner #taskList li .task-left{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+body.page-planner #taskList li .task-done{
+  margin-top: 2px;
+}
+
+body.page-planner #taskList li .task-done-label{
+  margin-top: 1px;
+  font-weight: 650;
+  color: var(--muted);
+  user-select: none;
+}
+
+body.page-planner #taskList li .task-content{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+body.page-planner #taskList li .task-title strong{
+  word-break: break-word;
+}
+
+body.page-planner #taskList li.is-done .task-title strong{
+  text-decoration: line-through;
+}
+
+body.page-planner #taskList li.is-done .meta{
+  text-decoration: line-through;
+}
+
 body.page-planner #taskList li button{
   background: rgba(17,24,39,0.08);
   color: #111827;
