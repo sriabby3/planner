@@ -7,7 +7,7 @@ body.page-index{
               linear-gradient(180deg, rgba(55, 111, 221, 0.55) 0%, rgba(14, 51, 202, 0.6) 100%),
               radial-gradient(1200px 650px at 20% -10%, rgba(17, 167, 187, 0.18), transparent 60%),
               radial-gradient(900px 520px at 92% 0%, hsla(185, 57%, 48%, 0.18), transparent 55%),
-              url("images/nor.jpg");
+              url("../images/nor.jpg");
   background-size: auto, auto, auto, cover;
   background-position: 0 0, 0 0, 0 0, center;
   background-repeat: no-repeat;
