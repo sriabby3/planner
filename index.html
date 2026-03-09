@@ -33,47 +33,15 @@
 
   <hr>
   <footer>
-    <p>
-      Nume: <input id="nume" type="text" name="nume" placeholder="Introdu numele" class="inline-input">
-      | Grupa: <input id="grupa" type="text" name="grupa" placeholder="Introdu grupa" class="inline-input">
-      | An: <input id="an" type="text" name="an" value="2026" class="inline-input year-input">
-    </p>
+    <div class="footer-card">
+      <p class="index-auth-links">
+        <strong>Intră în cont ca să-ți organizezi ziua:</strong> <a href="pages/login.html">Logare</a> |
+        <a href="pages/register.html">Înregistrare</a>
+      </p>
+    </div>
   </footer>
 
-  <script>
-    (function(){
-      const KEY = 'plannerIdentity';
-      const inputNume = document.getElementById('nume');
-      const inputGrupa = document.getElementById('grupa');
-      const inputAn = document.getElementById('an');
-
-      function load(){
-        try{
-          const raw = localStorage.getItem(KEY);
-          if(!raw) return;
-          const data = JSON.parse(raw);
-          if(data.nume) inputNume.value = data.nume;
-          if(data.grupa) inputGrupa.value = data.grupa;
-          if(data.an) inputAn.value = data.an;
-        }catch(e){
-          // ignore
-        }
-      }
-
-      function save(){
-        const data = { nume: inputNume.value.trim(), grupa: inputGrupa.value.trim(), an: inputAn.value.trim() };
-        try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(e){ }
-      }
-
-      [inputNume, inputGrupa, inputAn].forEach(el=>{
-        if(!el) return;
-        el.addEventListener('change', save);
-        el.addEventListener('input', save);
-      });
-
-      load();
-    })();
-  </script>
+  
 
 </body>
 </html>

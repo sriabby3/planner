@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planner zilnic - Logare</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body class="page-login">
+
+  <header>
+    <h1>Logare</h1>
+    <nav>
+      <a href="../index.html">Acasă</a> |
+      <a href="planner.html">Planner</a> |
+      <a href="history.html">Istoric</a> |
+      <a href="about.html">Despre</a> |
+      <a href="contact.html">Contact</a>
+    </nav>
+    <hr>
+  </header>
+
+  <main>
+    <section>
+      <h2>Intră în cont</h2>
+      <form id="loginForm">
+        <p>
+          <label for="loginEmail">Email:</label><br>
+          <input type="email" id="loginEmail" name="email" autocomplete="email" required />
+        </p>
+
+        <p>
+          <label for="loginPassword">Parolă:</label><br>
+          <input type="password" id="loginPassword" name="password" autocomplete="current-password" required />
+        </p>
+
+        <button type="submit">Logare</button>
+        <p id="authError" class="form-error" aria-live="polite"></p>
+      </form>
+
+      <p class="auth-links">
+        Nu ai cont? <a href="register.html">Înregistrare</a>.
+      </p>
+    </section>
+  </main>
+  <footer>
+  </footer>
+
+  <script src="../js/auth.js" defer></script>
+</body>
+</html>

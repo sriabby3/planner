@@ -66,6 +66,12 @@ body.page-contact main h2{
   font-size: 1.35rem;
 }
 
+body.page-contact .contact-note{
+  margin: 10px 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 /* Formular */
 body.page-contact form p{
   margin: 0 0 12px;
@@ -100,6 +106,44 @@ body.page-contact textarea:focus{
 
 body.page-contact button[type="submit"]{
   width: 100%;
+}
+
+body.page-contact .messages-list{
+  margin-top: 10px;
+}
+
+body.page-contact .messages-ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+body.page-contact .messages-ul li{
+  background: linear-gradient(180deg,#fbfdff,#f3f7ff);
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(74,108,247,0.06);
+}
+
+body.page-contact .msg-head{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+body.page-contact .msg-meta{
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+body.page-contact .msg-body{
+  margin-top: 8px;
+  color: #111827;
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 @media (min-width: 900px){

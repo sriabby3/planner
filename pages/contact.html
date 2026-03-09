@@ -29,7 +29,10 @@
     <section>
       <h2>Trimite un mesaj</h2>
 
-      <form>
+      <p id="contactAuthHint" class="contact-note"></p>
+      <p class="contact-note"><a href="login.html">Mergi la Logare</a></p>
+
+      <form id="contactForm">
         <p>
           <label for="name">Nume:</label><br>
           <input type="text" id="name" name="name" required />
@@ -48,13 +51,23 @@
         <button type="submit">Trimite</button>
       </form>
 
-      <p>(În Lab 4/5 putem conecta acest formular la CGI/AJAX.)</p>
+      <p id="contactStatus" class="contact-note" aria-live="polite"></p>
+
+      <hr>
+
+      <h2>Mesaje salvate</h2>
+      <div id="messagesList" class="messages-list">
+        <p class="contact-note">Nu există mesaje salvate încă.</p>
+      </div>
+
     </section>
   </main>
 
   <hr>
   <footer>
   </footer>
+
+  <script src="../js/contact-auth.js" defer></script>
 
 </body>
 </html>

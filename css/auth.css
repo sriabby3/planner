@@ -1,0 +1,57 @@
+body.page-login,
+body.page-register{
+  --accent: rgb(74,108,247);
+
+  background: radial-gradient(1100px 650px at 12% -10%, rgba(74,108,247, 0.16), transparent 60%),
+              radial-gradient(900px 520px at 92% 0%, rgba(111,140,255, 0.16), transparent 55%),
+              url("../images/star.jpg");
+  background-size: auto, auto, cover;
+  background-position: 0 0, 0 0, center;
+  background-repeat: no-repeat;
+}
+
+body.page-login header,
+body.page-register header{
+  background: linear-gradient(90deg, var(--accent), rgb(111,140,255));
+}
+
+body.page-login main,
+body.page-register main{
+  max-width: 720px;
+  margin: 18px auto 24px;
+  padding: 0 12px;
+}
+
+body.page-login main section,
+body.page-register main section{
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(16,24,40,0.06);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+}
+
+body.page-login input[type="email"],
+body.page-login input[type="password"],
+body.page-register input[type="email"],
+body.page-register input[type="password"]{
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e6e9ef;
+  border-radius: 10px;
+  background: #fbfdff;
+}
+
+body.page-login .form-error,
+body.page-register .form-error{
+  margin: 10px 0 0;
+  font-weight: 700;
+  color: var(--accent);
+  min-height: 1.2em;
+}
+
+body.page-login .auth-links,
+body.page-register .auth-links{
+  margin-top: 10px;
+  color: var(--muted);
+}

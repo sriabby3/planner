@@ -53,14 +53,14 @@ body.page-index main p{
   margin: 10px 0;
 }
 
-/* Footer cu identitate */
+/* Footer: logare / înregistrare */
 body.page-index footer{
   max-width: var(--index-max);
   margin: 0 auto;
   padding: 18px 12px 26px;
 }
 
-body.page-index footer p{
+body.page-index footer .footer-card{
   margin: 0;
   display: flex;
   flex-wrap: wrap;
