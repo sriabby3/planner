@@ -186,6 +186,30 @@ app.post('/api/messages', async (req, res) => {
   return res.json({ ok: true });
 });
 
+// Lab 4: afișare date din DB în tabele (utilizatori + mesaje)
+app.get('/api/admin/data', async (req, res) => {
+  const token = String(req.query?.token ?? '').trim();
+  const db = await getDb();
+  const user = await getUserByToken(db, token);
+  if (!user) return res.status(401).json({ ok: false, error: 'Neautorizat.' });
+
+  const users = await db.all(
+    `SELECT id, name, email, created_at
+     FROM users
+     ORDER BY id DESC
+     LIMIT 50`
+  );
+
+  const messages = await db.all(
+    `SELECT id, user_id, name, email, message, created_at
+     FROM messages
+     ORDER BY id DESC
+     LIMIT 50`
+  );
+
+  return res.json({ ok: true, users, messages });
+});
+
 // Static site
 const staticRoot = path.join(__dirname, '..');
 app.use(express.static(staticRoot));

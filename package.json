@@ -5,7 +5,8 @@
   "type": "commonjs",
   "scripts": {
     "dev": "node server/server.js",
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "db:print": "node server/print-db.js"
   },
   "dependencies": {
     "express": "^5.2.1",
