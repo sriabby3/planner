@@ -14,16 +14,69 @@
 
   const MESSAGES_KEY = 'plannerMessages';
 
+  function apiBase() {
+    if (window.location && window.location.protocol === 'file:') return null;
+    if (window.location && window.location.hostname === 'localhost' && window.location.port === '3000') {
+      return '';
+    }
+    return 'http://localhost:3000';
+  }
+
+  function apiUrl(path) {
+    const base = apiBase();
+    if (base === null) return null;
+    return `${base}${path}`;
+  }
+
+  async function getJson(url) {
+    const res = await fetch(url);
+    let data = null;
+    try {
+      data = await res.json();
+    } catch {
+      data = null;
+    }
+    if (!res.ok) {
+      const msg = data?.error || 'Eroare server.';
+      const err = new Error(msg);
+      err.status = res.status;
+      throw err;
+    }
+    return data;
+  }
+
+  async function postJson(url, body) {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body ?? {}),
+    });
+    let data = null;
+    try {
+      data = await res.json();
+    } catch {
+      data = null;
+    }
+    if (!res.ok) {
+      const msg = data?.error || 'Eroare server.';
+      const err = new Error(msg);
+      err.status = res.status;
+      throw err;
+    }
+    return data;
+  }
+
   function loadSession() {
     try {
       const raw = localStorage.getItem(SESSION_KEY);
       if (!raw) return null;
       const parsed = JSON.parse(raw);
       if (!parsed || typeof parsed !== 'object') return null;
+      const token = String(parsed.token ?? '').trim();
       const email = String(parsed.email ?? '').trim();
       const name = String(parsed.name ?? '').trim();
-      if (!email) return null;
-      return { email, name };
+      if (!token || !email) return null;
+      return { token, email, name };
     } catch {
       return null;
     }
@@ -56,19 +109,33 @@
     });
   }
 
-  function loadMessages() {
-    try {
-      const raw = localStorage.getItem(MESSAGES_KEY);
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  }
-
-  function renderMessages() {
+  async function renderMessages() {
     if (!messagesListEl) return;
-    const msgs = loadMessages();
+    const session = loadSession();
+
+    if (window.location.protocol === 'file:') {
+      messagesListEl.innerHTML = '<p class="contact-note">Pornește serverul Node și deschide site-ul pe http://localhost:3000.</p>';
+      return;
+    }
+
+    if (!session) {
+      messagesListEl.innerHTML = '<p class="contact-note">Loghează-te ca să vezi mesajele.</p>';
+      return;
+    }
+
+    let msgs = [];
+    try {
+      const url = apiUrl(`/api/messages?token=${encodeURIComponent(session.token)}`);
+      if (!url) {
+        messagesListEl.innerHTML = '<p class="contact-note">Pornește serverul Node și deschide site-ul pe http://localhost:3000.</p>';
+        return;
+      }
+      const data = await getJson(url);
+      msgs = Array.isArray(data?.messages) ? data.messages : [];
+    } catch (err) {
+      messagesListEl.innerHTML = `<p class="contact-note">${escapeHtml(err?.message || 'Nu pot încărca mesajele.')}</p>`;
+      return;
+    }
 
     if (!msgs.length) {
       messagesListEl.innerHTML = '<p class="contact-note">Nu există mesaje salvate încă.</p>';
@@ -80,7 +147,7 @@
 
     msgs.slice(0, 10).forEach((m) => {
       const li = document.createElement('li');
-      const when = m?.createdAt ? escapeHtml(m.createdAt) : '';
+      const when = m?.created_at ? escapeHtml(m.created_at) : '';
       const who = m?.email ? escapeHtml(m.email) : '';
       const name = m?.name ? escapeHtml(m.name) : '';
       const text = m?.message ? escapeHtml(m.message) : '';
@@ -108,7 +175,7 @@
         hintEl,
         'Pentru a trimite un mesaj trebuie să fii logat. Mergi la pagina de logare.'
       );
-      renderMessages();
+      void renderMessages();
       return;
     }
 
@@ -118,12 +185,12 @@
     if (nameEl && session.name && !nameEl.value) nameEl.value = session.name;
     if (emailEl && session.email && !emailEl.value) emailEl.value = session.email;
 
-    renderMessages();
+    void renderMessages();
   }
 
   if (!form) return;
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const session = loadSession();
@@ -132,26 +199,30 @@
       return;
     }
 
-    setText(statusEl, 'Mesajul a fost trimis (salvat local).');
+    if (window.location.protocol === 'file:') {
+      setText(statusEl, 'Pornește serverul Node și deschide site-ul pe http://localhost:3000.');
+      return;
+    }
 
-    // Demo pentru Lab: salvăm mesajul local
     try {
-      const arr = loadMessages();
-
-      arr.unshift({
+      const url = apiUrl('/api/messages');
+      if (!url) {
+        setText(statusEl, 'Pornește serverul Node și deschide site-ul pe http://localhost:3000.');
+        return;
+      }
+      await postJson(url, {
+        token: session.token,
         name: String(nameEl?.value ?? '').trim(),
         email: String(emailEl?.value ?? '').trim(),
         message: String(messageEl?.value ?? '').trim(),
-        createdAt: new Date().toISOString(),
       });
 
-      localStorage.setItem(MESSAGES_KEY, JSON.stringify(arr));
-    } catch {
-      // ignore
+      setText(statusEl, 'Mesajul a fost trimis (salvat în baza de date).');
+      if (messageEl) messageEl.value = '';
+      await renderMessages();
+    } catch (err) {
+      setText(statusEl, err?.message || 'Eroare la trimitere.');
     }
-
-    if (messageEl) messageEl.value = '';
-    renderMessages();
   });
 
   render();

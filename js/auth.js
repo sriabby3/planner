@@ -1,8 +1,23 @@
 (function () {
   'use strict';
 
-  const USERS_KEY = 'plannerUsers';
   const SESSION_KEY = 'plannerSession';
+
+  function apiBase() {
+    if (window.location && window.location.protocol === 'file:') return null;
+    // dacă deja ești pe backend, folosește relative
+    if (window.location && window.location.hostname === 'localhost' && window.location.port === '3000') {
+      return '';
+    }
+    // altfel (ex. Live Server), trimite la backend
+    return 'http://localhost:3000';
+  }
+
+  function apiUrl(path) {
+    const base = apiBase();
+    if (base === null) return null;
+    return `${base}${path}`;
+  }
 
   function plannerRedirectTarget() {
     const path = String(window.location.pathname ?? '').replace(/\\/g, '/');
@@ -15,22 +30,9 @@
     return String(email ?? '').trim().toLowerCase();
   }
 
-  function loadUsers() {
-    try {
-      const raw = localStorage.getItem(USERS_KEY);
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  }
-
-  function saveUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
-
-  function setSession(user) {
+  function setSession(token, user) {
     const session = {
+      token,
       email: user.email,
       name: user.name,
       loggedInAt: new Date().toISOString(),
@@ -38,9 +40,51 @@
     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
   }
 
+  async function postJson(url, body) {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body ?? {}),
+    });
+
+    let data = null;
+    try {
+      data = await res.json();
+    } catch {
+      data = null;
+    }
+
+    if (!res.ok) {
+      const msg =
+        data?.error ||
+        (res.status === 404
+          ? 'API nu este disponibil. Deschide site-ul pe http://localhost:3000.'
+          : 'Eroare server.');
+      const err = new Error(msg);
+      err.status = res.status;
+      throw err;
+    }
+
+    return data;
+  }
+
   function setError(errorEl, message) {
     if (!errorEl) return;
     errorEl.textContent = message || '';
+  }
+
+  function isFileProtocol() {
+    return window.location && window.location.protocol === 'file:';
+  }
+
+  function showFileProtocolHint(errorEl, formType) {
+    if (!isFileProtocol()) return false;
+    const page = formType === 'register' ? 'pages/register.html' : 'pages/login.html';
+    setError(
+      errorEl,
+      `Acest formular funcționează doar prin server. Deschide: http://localhost:3000/${page}`
+    );
+    return true;
   }
 
   function handleRegister() {
@@ -53,7 +97,12 @@
     const confirmEl = document.getElementById('regPasswordConfirm');
     const errorEl = document.getElementById('authError');
 
-    form.addEventListener('submit', (e) => {
+    if (showFileProtocolHint(errorEl, 'register')) {
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = true;
+    }
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const name = String(nameEl?.value ?? '').trim();
@@ -85,19 +134,23 @@
         return;
       }
 
-      const users = loadUsers();
-      const exists = users.some((u) => normalizeEmail(u?.email) === email);
-      if (exists) {
-        setError(errorEl, 'Există deja un cont cu acest email.');
-        emailEl?.focus();
+      if (isFileProtocol()) {
+        showFileProtocolHint(errorEl, 'register');
         return;
       }
 
-      const user = { name, email, password };
-      saveUsers([user, ...users]);
-      setSession(user);
-
-      window.location.href = plannerRedirectTarget();
+      try {
+        const url = apiUrl('/api/register');
+        if (!url) {
+          showFileProtocolHint(errorEl, 'register');
+          return;
+        }
+        const data = await postJson(url, { name, email, password });
+        setSession(data.token, data.user);
+        window.location.href = plannerRedirectTarget();
+      } catch (err) {
+        setError(errorEl, err?.message || 'Eroare la înregistrare.');
+      }
     });
 
     [nameEl, emailEl, passEl, confirmEl].forEach((el) => {
@@ -113,7 +166,12 @@
     const passEl = document.getElementById('loginPassword');
     const errorEl = document.getElementById('authError');
 
-    form.addEventListener('submit', (e) => {
+    if (showFileProtocolHint(errorEl, 'login')) {
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = true;
+    }
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const email = normalizeEmail(emailEl?.value);
@@ -131,16 +189,23 @@
         return;
       }
 
-      const users = loadUsers();
-      const user = users.find((u) => normalizeEmail(u?.email) === email);
-
-      if (!user || user.password !== password) {
-        setError(errorEl, 'Email sau parolă incorecte.');
+      if (isFileProtocol()) {
+        showFileProtocolHint(errorEl, 'login');
         return;
       }
 
-      setSession(user);
-      window.location.href = plannerRedirectTarget();
+      try {
+        const url = apiUrl('/api/login');
+        if (!url) {
+          showFileProtocolHint(errorEl, 'login');
+          return;
+        }
+        const data = await postJson(url, { email, password });
+        setSession(data.token, data.user);
+        window.location.href = plannerRedirectTarget();
+      } catch (err) {
+        setError(errorEl, err?.message || 'Eroare la logare.');
+      }
     });
 
     [emailEl, passEl].forEach((el) => {
